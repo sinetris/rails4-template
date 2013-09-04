@@ -1,6 +1,6 @@
 # Git: Initialize
 git :init
-git add: "."
+git add: "-A"
 git commit: %Q{ -m 'Rails4 scaffold' }
 
 # Helpers
@@ -201,7 +201,7 @@ create_file 'app/views/layouts/application.html.haml' do
 CODE
 end
 
-git add: "."
+git add: "-A"
 git commit: %Q{ -m 'configured gems' }
 
 
@@ -216,13 +216,13 @@ Dir["app/views/devise/**/*.erb"].each do |file|
   erb_to_yaml(file)
 end
 
-git add: "."
+git add: "-A"
 git commit: %Q{ -m 'add devise' }
 
 generate :controller, 'home', 'index'
 gsub_file 'config/routes.rb', /get "home\/index"/, "root 'home#index'"
 
-git add: "."
+git add: "-A"
 git commit: %Q{ -m 'add homepage view and root route' }
 
 if install_oauth_provider
@@ -237,7 +237,7 @@ if install_oauth_provider
   Dir["app/views/doorkeeper/**/*.erb"].each do |file|
     erb_to_yaml(file)
   end
-  git add: "."
+  git add: "-A"
   git commit: %Q{ -m 'add doorkeeper (OAuth provider for SSO)' }
 end
 
@@ -245,5 +245,5 @@ end
 run "bundle exec guard init rspec"
 
 
-git add: "."
+git add: "-A"
 git commit: %Q{ -m 'add guard' }
