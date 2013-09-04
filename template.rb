@@ -121,9 +121,33 @@ gsub_file 'features/support/env.rb', /transaction/, "truncation"
 inject_into_file 'features/support/env.rb', "\n  DatabaseCleaner.orm = 'mongoid'", after: 'begin'
 
 # Configure RSpec
-require 'email_spec'
 gsub_file 'spec/spec_helper.rb', /config.fixture_path/, '# config.fixture_path'
 gsub_file 'spec/spec_helper.rb', /config.use_transactional_fixtures/, '# config.use_transactional_fixtures'
+
+inject_into_file 'spec/spec_helper.rb', "\nrequire 'email_spec'", after: "require 'rspec/rails'"
+
+inject_into_file 'spec/spec_helper.rb', after: "RSpec.configure do |config|" do
+<<-CODE
+\n
+  config.include(EmailSpec::Helpers)
+  config.include(EmailSpec::Matchers)
+CODE
+end
+
+inject_into_file 'spec/spec_helper.rb', after: 'config.order = "random"' do
+<<-CODE
+\n
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :truncation
+  end
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+CODE
+end
 
 # Twitter Bootstrap
 inject_into_file 'app/assets/javascripts/application.js', "\n//= require twitter/bootstrap", after: '//= require turbolinks'
