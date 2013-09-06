@@ -5,7 +5,7 @@ git commit: %Q{ -m 'Rails4 scaffold' }
 
 # Helpers
 
-def erb_to_yaml(file)
+def erb_to_haml(file)
   output_file = file.gsub(/\.erb$/, '.haml')
   create_file output_file, html_to_haml(file)
   remove_file file
@@ -237,7 +237,7 @@ generate 'devise:views'
 require 'html2haml'
 say "Converting Devise to yaml"
 Dir["app/views/devise/**/*.erb"].each do |file|
-  erb_to_yaml(file)
+  erb_to_haml(file)
 end
 
 git add: "-A"
@@ -259,7 +259,7 @@ if install_oauth_provider
   generate 'doorkeeper:views'
   say "Converting Devise to yaml"
   Dir["app/views/doorkeeper/**/*.erb"].each do |file|
-    erb_to_yaml(file)
+    erb_to_haml(file)
   end
   git add: "-A"
   git commit: %Q{ -m 'add doorkeeper (OAuth provider for SSO)' }
